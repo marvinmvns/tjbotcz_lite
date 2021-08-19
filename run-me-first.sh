@@ -2,11 +2,46 @@
 !/bin/bash
 sudo apt-get install espeak
 sudo rm -rf tjbotcz_lite
-curl -sL https://deb.nodesource.com/setup_14.x
-apt-get install -y nodejs
+#----nodejs install
+echo ""
+RECOMMENDED_NODE_LEVEL="16"
+MIN_NODE_LEVEL="16"
+NEED_NODE_INSTALL=false
+
+if which node > /dev/null; then
+    NODE_VERSION=$(node --version 2>&1)
+    NODE_LEVEL=$(node --version 2>&1 | cut -d '.' -f 1 | cut -d 'v' -f 2)
+    if [ $NODE_LEVEL -lt $MIN_NODE_LEVEL ]; then
+        echo "Node.js v$NODE_VERSION.x is currently installed. We recommend installing"
+        echo "v$MIN_NODE_LEVEL.x or later."
+        NEED_NODE_INSTALL=true
+    fi
+else
+    echo "Node.js is not installed."
+    NEED_NODE_INSTALL=true
+fi
+
+if $NEED_NODE_INSTALL; then
+    read -p "Would you like to install Node.js v$RECOMMENDED_NODE_LEVEL.x? [Y/n] " choice </dev/tty
+    case "$choice" in
+        "" | "y" | "Y")
+            curl -sL https://deb.nodesource.com/setup_${RECOMMENDED_NODE_LEVEL}.x | sudo bash -
+            apt-get install -y nodejs
+            ;;
+        *)
+            echo "Warning: TJBot may not operate without installing a current version of Node.js."
+            ;;
+    esac
+fi
+
+
 git clone https://github.com/marvinmvns/tjbotcz_lite.git
 cd tjbotcz_lite
+sudo chmod +rwx /home/pi/Desktop/tjbotcz_lite/
+sudo chown -R $USER /home/pi/
 sudo npm install
+npm i asyncawait
+npm install i2c-bus
 npm install
 if grep -Fq "ipButton.js" ~/.bashrc
 then
