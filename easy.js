@@ -2,6 +2,7 @@ var fs = require("fs"); //filesystem
 var express = require("express");
 var bodyParser = require("body-parser");
 const voices = {
+              "pt-BR": {"female" : "pt-BR_IsabelaVoice",},
               "es-ES": {"female" : "es-ES_LauraVoice", "male": "es-ES_EnriqueVoice"},
               "en-US": {"female" : "en-US_AllisonVoice", "male": "en-US_MichaelVoice"},
               "fr-FR": {"female" : "fr-FR_ReneeVoice"},

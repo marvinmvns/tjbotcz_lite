@@ -4,7 +4,7 @@ sudo apt-get install espeak
 sudo rm -rf tjbotcz_lite
 curl -sL https://deb.nodesource.com/setup_14.x
 apt-get install -y nodejs
-git clone https://github.com/tjbotcz/tjbotcz_lite.git
+git clone https://github.com/marvinmvns/tjbotcz_lite.git
 cd tjbotcz_lite
 sudo npm install
 npm install
