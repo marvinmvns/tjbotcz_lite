@@ -1,11 +1,13 @@
-#!/bin/bash
 
+!/bin/bash
 sudo apt-get install espeak
-cd Desktop
-git clone https://github.com/tjbotcz/tjbotcz_lite.git 
+sudo rm -rf tjbotcz_lite
+curl -sL https://deb.nodesource.com/setup_14.x
+apt-get install -y nodejs
+git clone https://github.com/tjbotcz/tjbotcz_lite.git
 cd tjbotcz_lite
+sudo npm install
 npm install
-cd ~/
 if grep -Fq "ipButton.js" ~/.bashrc
 then
     echo "the ipButton is already setup in bashrc"
@@ -14,6 +16,5 @@ else
     echo "# automatically run ipButton program" >> ~/.bashrc
     echo "sudo node ~/Desktop/tjbotcz_lite/ipButton.js" >> ~/.bashrc
 fi
-cd Desktop/tjbotcz_lite
+hostname -I | cut -d' ' -f1
 sudo node easy.js
-
