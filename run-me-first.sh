@@ -1,5 +1,24 @@
 
-!/bin/bash
+#!/bin/sh
+
+#----make sure this is run as root
+user=`id -u`
+if [ $user -ne 0 ]; then
+    echo "This script requires root permissions. Please run this script with sudo."
+    exit
+fi
+
+#----ascii art!
+echo " _   _ _           _     _                 _       _                   "
+echo "| | (_) |         | |   | |               | |     | |                  "
+echo "| |_ _| |__   ___ | |_  | |__   ___   ___ | |_ ___| |_ _ __ __ _ _ __  "
+echo "| __| | '_ \ / _ \| __| | '_ \ / _ \ / _ \| __/ __| __| '__/ _\` | '_ \ "
+echo "| |_| | |_) | (_) | |_  | |_) | (_) | (_) | |_\__ \ |_| | | (_| | |_) |"
+echo " \__| |_.__/ \___/ \__| |_.__/ \___/ \___/ \__|___/\__|_|  \__,_| .__/ "
+echo "   _/ |                                                         | |    "
+echo "  |__/                                                          |_|    "
+
+
 sudo apt-get install espeak
 sudo rm -rf tjbotcz_lite
 #----nodejs install
