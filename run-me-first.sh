@@ -76,8 +76,8 @@ sudo apt-get install espeak
 sudo rm -rf tjbotcz_lite
 #----nodejs install
 echo ""
-RECOMMENDED_NODE_LEVEL="16"
-MIN_NODE_LEVEL="16"
+RECOMMENDED_NODE_LEVEL="15"
+MIN_NODE_LEVEL="15"
 NEED_NODE_INSTALL=false
 
 if which node > /dev/null; then
