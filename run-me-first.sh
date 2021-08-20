@@ -8,16 +8,69 @@ if [ $user -ne 0 ]; then
     exit
 fi
 
-#----ascii art!
-echo " _   _ _           _     _                 _       _                   "
-echo "| | (_) |         | |   | |               | |     | |                  "
-echo "| |_ _| |__   ___ | |_  | |__   ___   ___ | |_ ___| |_ _ __ __ _ _ __  "
-echo "| __| | '_ \ / _ \| __| | '_ \ / _ \ / _ \| __/ __| __| '__/ _\` | '_ \ "
-echo "| |_| | |_) | (_) | |_  | |_) | (_) | (_) | |_\__ \ |_| | | (_| | |_) |"
-echo " \__| |_.__/ \___/ \__| |_.__/ \___/ \___/ \__|___/\__|_|  \__,_| .__/ "
-echo "   _/ |                                                         | |    "
-echo "  |__/                                                          |_|    "
 
+#----update raspberry
+echo ""
+echo "TJBot requires an up-to-date installation of your Raspberry Pi's operating"
+echo "system software. If you have never done this before, it can take up to an"
+echo "hour or longer."
+read -p "Proceed with apt-get dist-upgrade? [Y/n] " choice </dev/tty
+case "$choice" in
+    "n" | "N")
+        echo "Warning: you may encounter problems running TJBot recipes without performing"
+        echo "an apt-get dist-upgrade. If you experience these problems, please re-run"
+        echo "the bootstrap script and perform this step."
+        ;;
+    *)
+        echo "Updating apt repositories [apt-get update]"
+        apt-get update
+        echo "Upgrading OS distribution [apt-get dist-upgrade]"
+        apt-get -y dist-upgrade
+        ;;
+esac
+
+#----install additional packages
+echo ""
+if [ $RASPIAN_VERSION_ID -eq 8 ]; then
+    echo "Installing additional software packages for Jessie (alsa, libasound2-dev, git, pigpio)"
+    apt-get install -y alsa-base alsa-utils libasound2-dev git pigpio
+#elif [ $RASPIAN_VERSION -eq 9 ]; then
+#    echo "Installing additional software packages for Stretch (libasound2-dev)"
+#    apt-get install -y libasound2-dev
+fi
+
+#----remove outdated apt packages
+echo ""
+echo "Removing unused software packages [apt-get autoremove]"
+apt-get -y autoremove
+
+#----enable camera on raspbery pi
+echo ""
+echo "If your Raspberry Pi has a camera installed, TJBot can use it to see."
+read -p "Enable camera? [y/N] " choice </dev/tty
+case "$choice" in
+    "y" | "Y")
+        if grep "start_x=1" /boot/config.txt
+        then
+            echo "Camera is already enabled."
+        else
+            echo "Enabling camera."
+            if grep "start_x=0" /boot/config.txt
+            then
+                sed -i "s/start_x=0/start_x=1/g" /boot/config.txt
+            else
+                echo "start_x=1" | tee -a /boot/config.txt >/dev/null 2>&1
+            fi
+            if grep "gpu_mem=128" /boot/config.txt
+            then
+                :
+            else
+                echo "gpu_mem=128" | tee -a /boot/config.txt >/dev/null 2>&1
+            fi
+        fi
+        ;;
+    *) ;;
+esac
 
 sudo apt-get install espeak
 sudo rm -rf tjbotcz_lite
@@ -58,10 +111,10 @@ git clone https://github.com/marvinmvns/tjbotcz_lite.git
 cd tjbotcz_lite
 sudo chmod +rwx /home/pi/Desktop/tjbotcz_lite/
 sudo chown -R $USER /home/pi/
-sudo npm install
+npm install
+npm i express
 npm i asyncawait
 npm install i2c-bus
-npm install
 if grep -Fq "ipButton.js" ~/.bashrc
 then
     echo "the ipButton is already setup in bashrc"
