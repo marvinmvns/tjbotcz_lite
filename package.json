@@ -13,8 +13,7 @@
     "is-running": "~2.1.0",
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
-    "open":"~6.2.0",
-    "tjbotczlib": "latest"
+    "open":"~6.2.0"  
   },
   "main": "tjbotcz_lite.js",
   "homepage": "https://github.com/tjbotcz/tjbotcz_lite",
